@@ -1,0 +1,106 @@
+AppComponent ve AltComponent ile çalışacağız.
+Event’ ler altcomponent’ te gerçekleşecek.
+AppComponent.ts’ in içeriği çok basit;
+
+export class AppComponent {
+
+  destroy = false;
+
+  ornek = '1';
+
+  Math = Math;
+
+}
+AltComponent’ in template’ inin var olup olmayacağını ngIf üzerinden belirleyecek ve bu yüzden destroy değeri var.
+ngOnChanges event’ i sadece üst component’ ten gelen verilerin değişikliğinde çalışıyor. Bu sebeple ornek değişkenini AppComponent’ ten AltComponent’ e bind ediyoruz.
+Math ise, javascript’ in Math kütüphanesi. Ornek değişkenini her seferinde random bir değer ile değiştirmekte kullanıyoruz.
+AppComponent Template;
+
+<div class="container">
+
+  <div class="row">
+
+    <button class="btn btn-primary" (click) = "ornek = Math.random(); ">Değiştir</button>
+
+    <button class="btn btn-primary" (click) = "destroy = true;">Destroy</button>
+
+    <app-alt [ornek] = "ornek"
+    *ngIf = "!destroy"
+    >
+    </app-alt>
+
+  </div>
+
+</div>
+Tıklandığında ornek değişkenini rastgele bir değer ile değiştiren buton
+destroy değerini true yapan buton
+ornek değişkenini property binding yolu ile alan, destroy değerine bağlı olarak(ngIf) varlık gösteren altComponent’ in selector element’ i.
+AltComponent.ts içeriği;
+
+import { Component, OnInit, OnChanges, Input, SimpleChanges, OnDestroy } from '@angular/core';
+
+@Component({
+  selector: 'app-alt',
+  templateUrl: './alt.component.html',
+  styleUrls: ['./alt.component.css']
+})
+export class AltComponent implements OnInit, OnChanges, OnDestroy {
+
+  hooks = [];
+  changes: SimpleChanges;
+  @Input() ornek: string ;
+
+  constructor() {
+    this.hooks.push('constructor tetiklendi');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.hooks.push('ngOnChanges tetiklendi');
+    this.changes = changes;
+    console.log(changes);
+  }
+
+  ngOnInit() {
+    this.hooks.push('ngOnInit tetiklendi');
+  }
+
+  ngOnDestroy() {
+    alert('güle güle');
+  }
+
+}
+Yakalamak istediğimiz event’ lerin hepsinin interface’ leri import edildi ve implemente edildi.
+hooks dizisi ile, her yeni event yakalandığında bu diziye o event’ e dair bir mesaj ekleniyor ve bu mesajlar template’ de döndürülüyor.
+changes değişkeni, onChanges event’ inin yakaladığı değişikliği object olarak tutuyor ve template’ de her seferinde yeni halini gösteriyoruz.
+constructor, ngOnChanges, ngInit ve ngOnDestroy metodları, ilgili interface’ lerin metodları. Hepsinde hooks dizisine ilgili mesaj atılıyor.
+AltComponent template;
+
+<ul class="list-group">
+
+    <li class="list-group-item" *ngFor="let hook of hooks">{{hook}}</li>
+
+    <div class="changes">
+            <pre>{{changes | json}}</pre>
+    </div>
+
+</ul>
+hooks dizisindeki tüm mesajlar listeleniyor. Her yeni event yakalandığında liste genişliyor.
+onChanges event’ inin yakaladığı değişiklikleri gösteren changes objesi basılıyor.
+Constructor
+Tüm object oriented dillerde olduğu gibi, class’ tan yeni bir obje yaratıldığında, ilk olarak bu metod çalışır. Component’ imizde bir class olduğu için, bu metod tetikleniyor.
+
+ngOnChanges
+constructor’ dan hemen sonra çalışır. Ve üst component’ ten aldığı veri her değiştiğinde, "SimpleChanges" formatında bir objeyi alarak tetiklenir. Bu obje ilgili değerlerin eski ve yeni hallerini tutar.
+
+ngOnInit
+Component yaratılıp, component’ e dair herşey bind edildikten sonra çalışır.
+
+ngOnDestroy
+Component yok edilirken, yok olmadan hemen önce çalışır.
+
+Uygulamanın canlı hali;
+
+
+Sayfadaki her değişiklikte, tetiklenen event’ lerin sıralandığını göreceksiniz.
+Değiştir butonu ile, AppComponent’ teki ornek değişkeninin değerini değiştirip, AltComponent’ e gönderdiğimiz için, ngOnchanges event’ i tetikleniyor ve SimpleChanges formatındaki değişiklik barındıran objenin ekranda basılmış halinden de eski ve yeni değerleri görüyoruz.
+Destroy butonu ile, destroy değerini true yapıyoruz ve varlığı bu değere bağlı olan altComponent yok edildiği için, ngOnDestroy metodu ile, güle güle mesajını alıyoruz.

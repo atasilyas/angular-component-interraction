@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="col-md-12" *ngIf="decoratorElement">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{decoratorElement.name}}</div>
+        <div class="panel-body">
+          <p>
+            <strong *ngIf="decoratorElement.type === 'server'" style="color: red">{{decoratorElement.content}}</strong>
+            <strong *ngIf="decoratorElement.type === 'blueprint'"
+                    style="color: blue">{{decoratorElement.content}}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="col-md-12" *ngIf="templeteElement">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{templeteElement.name}}</div>
+        <div class="panel-body">
+          <p>
+            <strong *ngIf="templeteElement.type === 'server'" style="color: red">{{templeteElement.content}}</strong>
+            <strong *ngIf="templeteElement.type === 'blueprint'"
+                    style="color: blue">{{templeteElement.content}}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+

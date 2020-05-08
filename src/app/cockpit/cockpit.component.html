@@ -1,0 +1,53 @@
+<div class="row">
+
+  <div class="col-md-6">
+    <h3 style="color: blueviolet">@Input @Output Interraction</h3>
+    <label>Server Name</label>
+    <input type="text" class="form-control" [(ngModel)]="newServerName" required="true" minlength="4">
+    <label>Server Content</label>
+    <input type="text" class="form-control" [(ngModel)]="newServerContent" required="true" minlength="4">
+    <div class="form-group">
+      <label for="exampleFormControlSelect1">Example select</label>
+      <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="isTemplete">
+        <option>true</option>
+        <option>false</option>
+      </select>
+    </div>
+    <br>
+    <button
+      class="btn btn-primary mr-2"
+      (click)="onAddServerDecorator()">Add Server
+    </button>
+    <button class="btn btn-primary mr-2"
+            (click)="onAddBlueprintDecorator()">Add Server BluePrint
+    </button>
+  </div>
+
+<!--Templete reference-->
+  <div class="col-md-6">
+    <h3 style="color: blueviolet">Templete reference Interraction</h3>
+    <label>Server Name</label>
+    <input type="text" class="form-control" #templeteServerName required="true" minlength="4">
+
+    <label>Server Content</label>
+    <input type="text" class="form-control"  #templeteServerContent required="true" minlength="4">
+    <div class="form-group">
+      <label for="exampleFormControlSelect1">Example select</label>
+      <select class="form-control" id="exampleFormControlSelect2">
+        <option>true</option>
+        <option>false</option>
+      </select>
+    </div>
+    <br>
+
+    <button
+      class="btn btn-primary mr-2"
+      (click)="onAddServerTemplete(templeteServerName, templeteServerContent)">Add Server
+    </button>
+    <button class="btn btn-primary mr-2"
+            (click)="onAddBlueprintTemplete(templeteServerName, templeteServerContent)">Add Server BluePrint
+    </button>
+  </div>
+
+</div>
+
